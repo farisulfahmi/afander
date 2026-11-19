@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Fashion Store POS (Toko Pakaian Afander)</title>
+    <title>Login - Afander</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4 font-sans text-gray-800">
@@ -51,11 +51,6 @@
                 Masuk
             </button>
 
-            <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs text-gray-600 space-y-1">
-                <div class="font-semibold text-gray-800">Akun Demo Sesuai FSD:</div>
-                <div>Pemilik Toko: <span class="font-mono font-semibold">pemilik</span> / <span class="font-mono font-semibold">pemilik123</span></div>
-                <div>Kasir POS: <span class="font-mono font-semibold">kasir</span> / <span class="font-mono font-semibold">kasir123</span></div>
-            </div>
         </form>
     </div>
 </body>

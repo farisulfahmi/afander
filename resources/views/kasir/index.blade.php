@@ -317,23 +317,32 @@
 @endif
 
 @if($lastTransaksi)
+    @php
+        // Konversi data ke array/object secara aman untuk mencegah error tipe data
+        $tx = is_array($lastTransaksi) ? (object)$lastTransaksi : $lastTransaksi;
+        $txDetails = $tx->details ?? [];
+    @endphp
     <div id="modal-struk" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4">
         <div class="bg-white rounded-xl max-w-sm w-full p-6 shadow-2xl space-y-4">
             <div id="area-struk" class="text-xs font-mono space-y-2 text-gray-800">
                 <div class="text-center border-b border-dashed border-gray-400 pb-2">
                     <div class="font-bold text-sm">TOKO PAKAIAN AFANDER</div>
                     <div>Pusat Mbay</div>
-                    <div>No: {{ $lastTransaksi->kode_struk }}</div>
-                    <div>{{ $lastTransaksi->waktu_transaksi }}</div>
-                    <div>Kasir: {{ $lastTransaksi->nama_kasir }}</div>
+                    <div>No: {{ $tx->kode_struk ?? '-' }}</div>
+                    <div>{{ $tx->waktu_transaksi ?? '-' }}</div>
+                    <div>Kasir: {{ $tx->nama_kasir ?? '-' }}</div>
                 </div>
                 <div class="border-b border-dashed border-gray-400 py-2 space-y-1">
-                    @foreach($lastTransaksi->details as $det)
+                    @foreach($txDetails as $det)
+                        @php
+                            $d = is_array($det) ? (object)$det : $det;
+                            $p = isset($d->produk) ? (is_array($d->produk) ? (object)$d->produk : $d->produk) : null;
+                        @endphp
                         <div>
-                            <div class="font-bold">{{ $det->produk->nama_produk ?? '-' }}</div>
+                            <div class="font-bold">{{ $p->nama_produk ?? 'Produk' }}</div>
                             <div class="flex justify-between">
-                                <span>{{ $det->qty_beli }} x Rp{{ number_format($det->harga_satuan, 0, ',', '.') }}</span>
-                                <span>Rp{{ number_format($det->subtotal, 0, ',', '.') }}</span>
+                                <span>{{ $d->qty_beli ?? 1 }} x Rp{{ number_format($d->harga_satuan ?? 0, 0, ',', '.') }}</span>
+                                <span>Rp{{ number_format($d->subtotal ?? 0, 0, ',', '.') }}</span>
                             </div>
                         </div>
                     @endforeach
@@ -341,15 +350,15 @@
                 <div class="space-y-1 pt-1">
                     <div class="flex justify-between font-bold">
                         <span>TOTAL</span>
-                        <span>Rp{{ number_format($lastTransaksi->total_harga, 0, ',', '.') }}</span>
+                        <span>Rp{{ number_format($tx->total_harga ?? 0, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>BAYAR ({{ $lastTransaksi->metode_bayar }})</span>
-                        <span>Rp{{ number_format($lastTransaksi->nominal_bayar, 0, ',', '.') }}</span>
+                        <span>BAYAR ({{ $tx->metode_bayar ?? 'Tunai' }})</span>
+                        <span>Rp{{ number_format($tx->nominal_bayar ?? 0, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between font-bold">
                         <span>KEMBALIAN</span>
-                        <span>Rp{{ number_format($lastTransaksi->kembalian, 0, ',', '.') }}</span>
+                        <span>Rp{{ number_format($tx->kembalian ?? 0, 0, ',', '.') }}</span>
                     </div>
                 </div>
                 <div class="text-center border-t border-dashed border-gray-400 pt-2">
